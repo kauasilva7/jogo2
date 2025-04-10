@@ -11,9 +11,11 @@ document.addEventListener('keypress', (e) => {
 });
 
 class Entidade {
+    #x
+    #y
     constructor(x, y, largura, altura, cor) {
-        this.x = x;
-        this.y = y;
+        this.#x = x;
+        this.#y = y;
         this.largura = largura;
         this.altura = altura;
         this.cor = cor;
@@ -21,17 +23,32 @@ class Entidade {
 
     desenhar() {
         ctx.fillStyle = this.cor;
-        ctx.fillRect(this.x, this.y, this.largura, this.altura);
+        ctx.fillRect(this.#x, this.#y, this.largura, this.altura);
+    }
+    get x () {
+        return this.#x
+    }
+    set x (valor) {
+        //adicionar uma condição para verificar quem pode mexer
+        this.#x = valor
+    }
+    get y () {
+        return this.#y
+    }
+    set y (valor) {
+        this.#y = valor
     }
 }
 
+
 class Personagem extends Entidade {
     #velocidade_y;
-
     constructor(x, y, largura, altura, cor) {
         super(x, y, largura, altura, cor);
         this.#velocidade_y = 0;
         this.pulando = false;
+        this.imagem = new Image()
+        this.imagem.src = './image.png'
     }
 
     saltar() {
@@ -71,8 +88,14 @@ class Personagem extends Entidade {
             }
         }
     }
+    desenhar(){
 
-    DesenharPersonagem(){
+        ctx.drawImage(
+            this.imagem,
+            this.x,
+            this.y,
+            this.largura,
+            this.altura )
         
     }
 }
@@ -81,6 +104,8 @@ class Obstaculo extends Entidade {
     constructor(x, y, largura, altura, cor) {
         super(x, y, largura, altura, cor);
         this.velocidade_x = 3;
+        this.imagem = new Image()
+        this.imagem.src = './obstaculo.png'
     }
 
     atualizar() {
@@ -90,6 +115,16 @@ class Obstaculo extends Entidade {
             this.velocidade_x += 1;
             pontuacao++; 
         }
+    }
+    desenhar(){
+
+        ctx.drawImage(
+            this.imagem,
+            this.x,
+            this.y,
+            this.largura,
+            this.altura )
+        
     }
 }
 
